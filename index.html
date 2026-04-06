@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volt Typhoon — Chinese Cyber Threats to U.S. Critical Infrastructure</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===================== RESET & VARS ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --red: #ff2d3b;
+  --red-dim: #cc0014;
+  --red-glow: rgba(255,45,59,0.15);
+  --gold: #f0c040;
+  --cyan: #00e5ff;
+  --darker: #000000;
+  --dark: #080808;
+  --mid: #111111;
+  --card: #0d0d0d;
+  --border: #1e1e1e;
+  --text: #eeeeee;
+  --muted: #777777;
+  --mono: 'Share Tech Mono', monospace;
+  --display: 'Bebas Neue', sans-serif;
+  --body: 'Inter', sans-serif;
+}
+
+body {
+  background: var(--darker);
+  color: var(--text);
+  font-family: var(--body);
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* GRID BG */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===================== NAV ===================== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: stretch;
+  height: 56px;
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav-links::-webkit-scrollbar { display: none; }
+
+.nav-links li a {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--border);
+  transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: var(--red);
+  background: rgba(255,45,59,0.05);
+}
+
+.nav-links li a.active {
+  border-bottom: 2px solid var(--red);
+}
+
+/* ===================== PAGES ===================== */
+.page {
+  display: none;
+  min-height: 100vh;
+  padding-top: 56px;
+  position: relative;
+  z-index: 1;
+}
+
+.page.active { display: block; }
+
+/* ===================== HERO / LANDING ===================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 64px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-word {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  font-family: var(--display);
+  font-size: clamp(100px, 18vw, 240px);
+  color: rgba(255,45,59,0.04);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--red);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.7s ease forwards;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 40px; height: 1px;
+  background: var(--red);
+}
+
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(48px, 7.5vw, 108px);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 60px rgba(255,45,59,0.12);
+  max-width: 920px;
+  animation: fadeUp 0.8s 0.1s ease forwards;
+  opacity: 0;
+}
+
+.hero h1 .accent { color: var(--red); display: block; }
+
+.hero-abstract {
+  margin-top: 36px;
+  max-width: 640px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #aaaaaa;
+  animation: fadeUp 0.8s 0.2s ease forwards;
+  opacity: 0;
+}
+
+.hero-abstract strong { color: var(--gold); font-weight: 500; }
+
+/* THREAT BAR */
+.threat-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 48px;
+  animation: fadeUp 0.8s 0.3s ease forwards;
+  opacity: 0;
+}
+
+.threat-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--red);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.threat-blocks {
+  display: flex;
+  gap: 3px;
+}
+
+.t-block {
+  width: 22px; height: 8px;
+  background: rgba(255,45,59,0.12);
+  border-radius: 1px;
+}
+
+.t-block.on {
+  background: var(--red);
+  animation: tpulse 1.6s ease-in-out infinite;
+}
+
+.t-block:nth-child(1).on{animation-delay:0s}
+.t-block:nth-child(2).on{animation-delay:0.08s}
+.t-block:nth-child(3).on{animation-delay:0.16s}
+.t-block:nth-child(4).on{animation-delay:0.24s}
+.t-block:nth-child(5).on{animation-delay:0.32s}
+.t-block:nth-child(6).on{animation-delay:0.40s}
+.t-block:nth-child(7).on{animation-delay:0.48s}
+.t-block:nth-child(8).on{animation-delay:0.56s}
+
+@keyframes tpulse {
+  0%,100%{opacity:0.45} 50%{opacity:1}
+}
+
+.threat-status {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--red);
+}
+
+/* TEAM GRID */
+.team-section {
+  padding: 80px 64px;
+  border-top: 1px solid var(--border);
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1; max-width: 60px; height: 1px;
+  background: var(--red-dim);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.team-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: border-color 0.3s, background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.team-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.team-card:hover::after { transform: scaleX(1); }
+.team-card:hover { border-color: rgba(255,45,59,0.3); background: rgba(255,45,59,0.04); }
+
+.team-photo {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: rgba(255,45,59,0.1);
+  border: 2px solid var(--red-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--red);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.team-photo-img {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--red-dim);
+  margin-bottom: 20px;
+}
+
+.team-name {
+  font-family: var(--display);
+  font-size: 24px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.team-role {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ===================== INNER PAGES ===================== */
+.page-header {
+  padding: 72px 64px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header-bg {
+  position: absolute;
+  right: 40px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--display);
+  font-size: clamp(80px, 14vw, 180px);
+  color: rgba(255,45,59,0.04);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.05em;
+}
+
+.page-number {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--red);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.page-number::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--red);
+}
+
+.page-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 6vw, 80px);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 0.95;
+}
+
+.page-title em {
+  font-style: normal;
+  color: var(--red);
+}
+
+.page-subtitle {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 600px;
+  line-height: 1.6;
+  font-family: var(--mono);
+  letter-spacing: 0.05em;
+}
+
+/* PAGE BODY */
+.page-body {
+  padding: 64px;
+}
+
+/* TWO-COL */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.two-col.wide-left { grid-template-columns: 3fr 2fr; }
+.two-col.wide-right { grid-template-columns: 2fr 3fr; }
+
+/* PROSE */
+.prose {
+  font-size: 15px;
+  line-height: 1.85;
+  color: #cccccc;
+}
+
+.prose p + p { margin-top: 16px; }
+.prose strong { color: var(--gold); font-weight: 500; }
+
+/* CALLOUT */
+.callout {
+  background: rgba(255,45,59,0.06);
+  border-left: 3px solid var(--red);
+  padding: 20px 24px;
+  margin-top: 24px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: #999;
+  letter-spacing: 0.04em;
+}
+
+.callout strong { color: var(--gold); font-weight: 400; }
+
+/* BULLET LIST */
+.bullet-list {
+  list-style: none;
+  margin-top: 8px;
+}
+
+.bullet-list li {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
+  color: #cccccc;
+  line-height: 1.6;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.bullet-list li::before {
+  content: '//';
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+  min-width: 22px;
+  padding-top: 2px;
+}
+
+/* CARD STACK */
+.card-stack { display: flex; flex-direction: column; gap: 1px; }
+
+.info-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  padding: 22px 24px;
+  transition: border-left-color 0.3s, background 0.3s;
+}
+
+.info-card:hover {
+  border-left-color: var(--red);
+  background: rgba(255,45,59,0.04);
+}
+
+.info-card-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.info-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.info-card-desc {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.6;
+}
+
+/* SECTOR GRID */
+.sector-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 48px;
+}
+
+.sector-cell {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 32px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+
+.sector-cell::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.sector-cell:hover::after { transform: scaleX(1); }
+.sector-cell:hover { background: rgba(255,45,59,0.07); }
+
+.sector-icon { font-size: 30px; margin-bottom: 12px; }
+
+.sector-name {
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.sector-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* LAW CARDS */
+.law-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 32px;
+}
+
+.law-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 28px;
+  transition: border-color 0.3s;
+}
+
+.law-card:hover { border-color: rgba(255,45,59,0.3); }
+
+.law-abbr {
+  font-family: var(--display);
+  font-size: 44px;
+  color: var(--red);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.law-name {
+  font-size: 11px;
+  color: var(--gold);
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+}
+
+.law-desc {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.6;
+}
+
+/* DEFENSE LIST */
+.defense-list { list-style: none; }
+
+.defense-list li {
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #cccccc;
+}
+
+.defense-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+  min-width: 28px;
+  padding-top: 2px;
+  letter-spacing: 0.1em;
+}
+
+/* WHY LOTL WORKS - centered full-width grid */
+.lotl-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  margin-top: 8px;
+}
+
+.lotl-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 28px 20px;
+  text-align: center;
+  transition: background 0.3s, border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.lotl-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.4s ease;
+}
+
+.lotl-item:hover::after { transform: scaleX(1); }
+.lotl-item:hover { background: rgba(255,45,59,0.06); border-color: rgba(255,45,59,0.25); }
+
+.lotl-icon { font-size: 26px; margin-bottom: 10px; }
+
+.lotl-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.lotl-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .lotl-grid { grid-template-columns: repeat(2, 1fr); }
+}
+  height: 1px;
+  background: linear-gradient(to right, var(--red), transparent);
+  margin: 48px 0;
+}
+
+/* REFERENCES */
+.ref-entry {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.ref-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  padding-top: 2px;
+}
+
+.ref-content { font-size: 14px; line-height: 1.65; color: #aaa; }
+.ref-content strong { color: #ddd; font-weight: 500; }
+.ref-content a { color: var(--cyan); text-decoration: none; }
+.ref-content a:hover { text-decoration: underline; }
+
+/* RESOURCES */
+.resource-entry {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 24px 28px;
+  margin-bottom: 2px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: center;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.resource-entry:hover {
+  border-color: rgba(255,45,59,0.3);
+  background: rgba(255,45,59,0.04);
+}
+
+.resource-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.resource-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.resource-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--red);
+  border: 1px solid var(--red-dim);
+  padding: 4px 10px;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.resource-link {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--cyan);
+  margin-top: 6px;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+
+.resource-link:hover { text-decoration: underline; }
+
+/* REPORT PAGE */
+.report-placeholder {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--red);
+  padding: 64px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.report-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.report-title {
+  font-family: var(--display);
+  font-size: 32px;
+  letter-spacing: 0.1em;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.report-desc {
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  border: 1px solid var(--red-dim);
+  padding: 12px 24px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+  background: transparent;
+}
+
+.btn:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+/* TIMELINE */
+.timeline {
+  position: relative;
+  padding-left: 32px;
+  border-left: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0 0 32px 28px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -5px; top: 6px;
+  width: 8px; height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--red);
+}
+
+.timeline-date {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+
+.timeline-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.timeline-desc {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.6;
+}
+
+/* VISUAL DIAGRAM */
+.attack-chain {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 40px 0;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.chain-step {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  min-width: 130px;
+  text-align: center;
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 0.3s;
+}
+
+.chain-step:hover { border-color: var(--red); }
+
+.chain-step-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--red);
+  letter-spacing: 0.2em;
+  margin-bottom: 6px;
+}
+
+.chain-step-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.chain-step-sub {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.chain-arrow {
+  font-size: 16px;
+  color: var(--red-dim);
+  flex-shrink: 0;
+  padding: 0 4px;
+}
+
+/* GLITCH */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+
+.glitch::before {
+  color: var(--red);
+  animation: glitch1 1.2s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch::after {
+  color: var(--cyan);
+  animation: glitch2 1.2s infinite;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  opacity: 0.35;
+}
+
+@keyframes glitch1 {
+  0%,70%,100%{transform:none;opacity:0}
+  74%{transform:translateX(-6px) skewX(-2deg);opacity:1}
+  78%{transform:translateX(6px) skewX(2deg);opacity:1}
+  82%{transform:translateX(-3px);opacity:1}
+  86%{transform:none;opacity:0}
+}
+
+@keyframes glitch2 {
+  0%,72%,100%{transform:none;opacity:0}
+  76%{transform:translateX(6px) skewX(3deg);opacity:0.5}
+  80%{transform:translateX(-5px);opacity:0.5}
+  84%{transform:translateX(2px);opacity:0.3}
+  88%{transform:none;opacity:0}
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit:scrollbar-track{background:var(--darker)}
+::-webkit-scrollbar-thumb{background:var(--red-dim)}
+
+/* FOOTER */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  padding: 24px 64px;
+  background: var(--darker);
+  border-top: 1px solid rgba(255,45,59,0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 80px;
+}
+
+.footer-l, .footer-r {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+}
+
+.footer-r span { color: var(--red); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hero, .page-body, .page-header, .team-section { padding-left: 24px; padding-right: 24px; }
+  .two-col, .two-col.wide-left, .two-col.wide-right { grid-template-columns: 1fr; gap: 40px; }
+  .sector-grid { grid-template-columns: repeat(2,1fr); }
+  .law-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .site-footer { flex-direction: column; gap: 8px; text-align: center; padding: 20px 24px; }
+  .nav-logo { display: none; }
+}
+
+/* ===================== SIGNAL TRANSITION ===================== */
+#transitionOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#transitionOverlay.active { pointer-events: all; }
+
+#transitionCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+}
+
+#transitionScanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(0,0,0,0.45) 3px,
+    rgba(0,0,0,0.45) 4px
+  );
+  opacity: 0;
+}
+
+#transitionChroma {
+  position: absolute;
+  inset: 0;
+  background: var(--red);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+/* ===================== PRESENT BUTTON IN NAV ===================== */
+#presentBtn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--border);
+  padding: 0 20px;
+  height: 100%;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+#presentBtn:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+/* ===================== PRESENTATION MODE UI ===================== */
+#presentUI {
+  display: none;
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  background: rgba(0,0,0,0.92);
+  border: 1px solid var(--red-dim);
+  backdrop-filter: blur(12px);
+  align-items: center;
+  gap: 0;
+  box-shadow: 0 0 40px rgba(255,45,59,0.25);
+}
+
+#presentUI.visible { display: flex; }
+
+#presentUI button {
+  font-family: var(--mono);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border);
+  color: var(--muted);
+  padding: 14px 24px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+
+#presentUI button:last-child {
+  border-right: none;
+  border-left: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--red);
+  letter-spacing: 0.2em;
+}
+
+#presentUI button:hover { color: #fff; background: rgba(255,45,59,0.1); }
+
+#presentCounter {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--red);
+  padding: 14px 28px;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+  min-width: 90px;
+  text-align: center;
+}
+
+/* Present mode body states */
+body.present-mode #mainNav { display: none; }
+body.present-mode .page { padding-top: 0; }
+body.present-mode .site-footer { display: none; }
+</style>
+<body>
+
+<!-- SIGNAL INTERFERENCE TRANSITION OVERLAY -->
+<div id="transitionOverlay">
+  <canvas id="transitionCanvas"></canvas>
+  <div id="transitionScanlines"></div>
+  <div id="transitionChroma"></div>
+</div>
+
+<!-- PRESENTATION MODE UI -->
+<div id="presentUI">
+  <button id="prevBtn" onclick="presentNav(-1)" title="Previous">&#8592;</button>
+  <div id="presentCounter">01 / 08</div>
+  <button id="nextBtn" onclick="presentNav(1)" title="Next">&#8594;</button>
+  <button id="exitPresentBtn" onclick="togglePresentMode()" title="Exit (Esc)">&#x2715; EXIT</button>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<nav id="mainNav">
+  <div class="nav-logo">// VOLT TYPHOON — ISYS 40403</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" class="active" onclick="showPage('landing',this);return false;">Home</a></li>
+    <li><a href="#" onclick="showPage('background',this);return false;">01 · Background</a></li>
+    <li><a href="#" onclick="showPage('ttp',this);return false;">02 · TTPs</a></li>
+    <li><a href="#" onclick="showPage('sectors',this);return false;">03 · Sectors</a></li>
+    <li><a href="#" onclick="showPage('legal',this);return false;">04 · Legal</a></li>
+    <li><a href="#" onclick="showPage('references',this);return false;">References</a></li>
+    <li><a href="#" onclick="showPage('resources',this);return false;">Resources</a></li>
+    <li><a href="#" onclick="showPage('report',this);return false;">Report</a></li>
+  </ul>
+  <button id="presentBtn" onclick="togglePresentMode()">⊞ PRESENT</button>
+</nav>
+
+<!-- ===================== PAGE: LANDING ===================== -->
+<div class="page active" id="page-landing">
+
+  <section class="hero">
+    <div class="hero-bg-word">VOLT TYPHOON</div>
+    <div class="hero-eyebrow">// ISYS 40403 — Cybersecurity Portfolio — 2025</div>
+    <h1>
+      <span class="glitch" data-text="CHINESE CYBER">CHINESE CYBER</span>
+      THREATS TO U.S.
+      <span class="accent">CRITICAL INFRASTRUCTURE</span>
+    </h1>
+
+    <p class="hero-abstract">
+      <strong>Abstract:</strong> This project examines Chinese state-sponsored cyber threats to U.S. critical infrastructure, with particular focus on the Volt Typhoon threat actor — first identified by Microsoft in 2023 and subsequently attributed to the People's Republic of China by CISA, the FBI, and the NSA. The analysis covers Volt Typhoon's living-off-the-land infiltration techniques, exploitation of edge devices, and the strategic shift from traditional espionage toward pre-positioning for potential disruption during geopolitical conflict. Targeted sectors including energy, water, transportation, and telecommunications are examined alongside the legal frameworks governing the U.S. response. The project proposes defensive countermeasures including enhanced vulnerability disclosure, public-private partnerships, and international deterrence strategies.
+    </p>
+
+    <div class="threat-bar">
+      <span class="threat-label">// Threat Level</span>
+      <div class="threat-blocks">
+        <div class="t-block on"></div><div class="t-block on"></div>
+        <div class="t-block on"></div><div class="t-block on"></div>
+        <div class="t-block on"></div><div class="t-block on"></div>
+        <div class="t-block on"></div><div class="t-block on"></div>
+        <div class="t-block"></div><div class="t-block"></div>
+      </div>
+      <span class="threat-status">CRITICAL — ACTIVE CAMPAIGN</span>
+    </div>
+  </section>
+
+  <section class="team-section">
+    <div class="section-label">// Research Team — University of Arkansas</div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-photo">WM</div>
+        <div class="team-name">Walker McCumber</div>
+        <div class="team-role">// Research Lead</div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">CC</div>
+        <div class="team-name">Connor Cobern</div>
+        <div class="team-role">// Research Analyst</div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">KW</div>
+        <div class="team-name">Kyzer Wilmer</div>
+        <div class="team-role">// Research Analyst</div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:32px; max-width:700px;">
+      <strong>NOTE:</strong> Team member photos will be added as the portfolio is finalized. Initials are displayed as placeholders. To add a photo, replace the initials div with an &lt;img&gt; tag using the <code>team-photo-img</code> class.
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-l">ISYS 40403 — Cybersecurity Project — University of Arkansas</div>
+    <div class="footer-r">McCumber · Cobern · Wilmer &nbsp;|&nbsp; <span>VOLT TYPHOON ANALYSIS</span></div>
+  </footer>
+</div>
+
+<!-- ===================== PAGE: BACKGROUND ===================== -->
+<div class="page" id="page-background">
+  <div class="page-header">
+    <div class="page-header-bg">BACKGROUND</div>
+    <div class="page-number">// 01 — Background &amp; Attribution</div>
+    <div class="page-title decode-title" data-text="Background & Attribution">Background &amp; <em>Attribution</em></div>
+    <div class="page-subtitle">Discovery of Volt Typhoon, attribution to Chinese state actors, and the strategic doctrine shift from espionage to infrastructure pre-positioning.</div>
+  </div>
+
+  <div class="page-body">
+    <div class="two-col wide-left">
+      <div>
+        <div class="prose">
+          <p>In May 2023, <strong>Microsoft Threat Intelligence</strong> published an advisory identifying a novel Chinese state-sponsored threat actor operating inside U.S. critical infrastructure networks. Dubbed <strong>Volt Typhoon</strong>, the group had maintained a covert, persistent presence since at least mid-2021 — with particular focus on Guam and other U.S. territories critical to Pacific military operations.</p>
+          <p>The disclosure triggered an immediate interagency response. CISA, the FBI, and the NSA issued a coordinated joint advisory confirming attribution to China and warning critical infrastructure operators of the campaign's scope. The advisory marked one of the most significant public attributions of Chinese cyber activity in recent memory.</p>
+          <p>What distinguished Volt Typhoon from prior Chinese campaigns was intent. Unlike the sustained intellectual property theft associated with groups like APT10 or APT41, Volt Typhoon showed no interest in exfiltrating data. Instead, the group was methodically mapping networks, establishing redundant access pathways, and lying dormant — a pattern consistent with <strong>pre-positioning for disruptive action</strong> during a future conflict scenario, most plausibly a Taiwan contingency.</p>
+          <p>This represents a fundamental shift in Chinese cyber doctrine: from intelligence collection toward sabotage readiness, embedding capabilities inside civilian infrastructure that would be essential to military and civilian response during a crisis.</p>
+        </div>
+        <div class="callout">
+          <strong>CISA JOINT ADVISORY — MAY 2023:</strong><br>
+          Volt Typhoon has been active since at least mid-2021 and has targeted critical infrastructure organizations in Guam and elsewhere in the United States across multiple sectors including communications, energy, transportation, and water.
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">// Key Attribution Events</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">MID-2021</div>
+            <div class="timeline-title">Campaign Begins</div>
+            <div class="timeline-desc">Volt Typhoon establishes initial footholds in U.S. critical infrastructure, exploiting edge device vulnerabilities.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">MAY 2023</div>
+            <div class="timeline-title">Microsoft Attribution</div>
+            <div class="timeline-desc">Microsoft Threat Intelligence publishes first public advisory naming Volt Typhoon and attributing it to China.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">MAY 2023</div>
+            <div class="timeline-title">CISA/FBI/NSA Joint Advisory</div>
+            <div class="timeline-desc">U.S. intelligence agencies confirm attribution and issue warnings to all critical infrastructure sectors.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">JAN 2024</div>
+            <div class="timeline-title">DOJ Disruption Operation</div>
+            <div class="timeline-desc">FBI court-authorized operation disrupts the KV-Botnet, Volt Typhoon's primary C2 relay infrastructure.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2024–PRESENT</div>
+            <div class="timeline-title">Salt Typhoon Identified</div>
+            <div class="timeline-desc">Related PRC actor Salt Typhoon found compromising U.S. telecom providers, broadening the threat picture.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section-label">// Attribution Evidence</div>
+    <div class="card-stack">
+      <div class="info-card">
+        <div class="info-card-tag">Tradecraft Signature</div>
+        <div class="info-card-title">Living-Off-the-Land Exclusivity</div>
+        <div class="info-card-desc">Zero custom malware deployment — a deliberate operational choice consistent with PRC state-level operational security requirements and persistent access goals.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Geographic Targeting</div>
+        <div class="info-card-title">Guam-Centric Operations</div>
+        <div class="info-card-desc">Disproportionate focus on Guam — the primary U.S. military hub for Indo-Pacific operations — indicating strategic, state-directed targeting aligned with PRC military objectives.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Behavioral Pattern</div>
+        <div class="info-card-title">No Data Exfiltration</div>
+        <div class="info-card-desc">Unlike financially or intelligence-motivated actors, Volt Typhoon collects no data — consistent only with pre-positioning for future disruption rather than espionage.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Infrastructure</div>
+        <div class="info-card-title">KV-Botnet Proxy Network</div>
+        <div class="info-card-desc">Sophisticated SOHO router botnet used to obscure C2 traffic — requires significant resources and planning consistent only with state-level threat actors.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-l">Section 01 — Background &amp; Attribution</div>
+    <div class="footer-r"><span>VOLT TYPHOON</span> · ISYS 40403</div>
+  </footer>
+</div>
+
+<!-- ===================== PAGE: TTPs ===================== -->
+<div class="page" id="page-ttp">
+  <div class="page-header">
+    <div class="page-header-bg">TACTICS</div>
+    <!-- EASTER EGG 2: Binary encodes L=01001100 O=01001111 T=01010100 L=01001100 -->
+    <div class="lotl-binary-hint" title="">01001100 01001111 01010100 01001100</div>
+    <div class="page-number">// 02 — Techniques, Tactics &amp; Procedures</div>
+    <div class="page-title decode-title" data-text="Tactics, Techniques & Procedures">Tactics, Techniques &amp; <em>Procedures</em></div>
+    <div class="page-subtitle">Living-off-the-land techniques, edge device exploitation, botnet infrastructure, and evasion methodology used by Volt Typhoon.</div>
+  </div>
+
+  <div class="page-body">
+
+    <div class="section-label">// Attack Chain — Volt Typhoon Intrusion Sequence</div>
+    <div class="attack-chain">
+      <div class="chain-step">
+        <div class="chain-step-num">STEP 01</div>
+        <div class="chain-step-label">Initial Access</div>
+        <div class="chain-step-sub">Edge device CVE exploitation (Cisco, Fortinet)</div>
+      </div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-step">
+        <div class="chain-step-num">STEP 02</div>
+        <div class="chain-step-label">Establish Foothold</div>
+        <div class="chain-step-sub">Web shell deployment, credential harvesting</div>
+      </div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-step">
+        <div class="chain-step-num">STEP 03</div>
+        <div class="chain-step-label">Lateral Movement</div>
+        <div class="chain-step-sub">LOLBins, WMI, PowerShell, valid accounts</div>
+      </div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-step">
+        <div class="chain-step-num">STEP 04</div>
+        <div class="chain-step-label">C2 Routing</div>
+        <div class="chain-step-sub">KV-Botnet SOHO proxy obfuscation</div>
+      </div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-step">
+        <div class="chain-step-num">STEP 05</div>
+        <div class="chain-step-label">Persistence</div>
+        <div class="chain-step-sub">Redundant access, dormant positioning</div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="two-col">
+      <div>
+        <div class="section-label">// Core Techniques</div>
+        <div class="card-stack">
+          <div class="info-card">
+            <div class="info-card-tag">Primary Method</div>
+            <div class="info-card-title">Living-Off-the-Land (LOTL)</div>
+            <div class="info-card-desc">Exclusive reliance on native Windows binaries — PowerShell, WMI, WMIC, netsh, ntdsutil, certutil — to blend into normal administrative traffic and defeat signature-based detection entirely.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-tag">Initial Access Vector</div>
+            <div class="info-card-title">Edge Device Exploitation</div>
+            <div class="info-card-desc">Systematic exploitation of unpatched CVEs in internet-facing routers and firewalls from Cisco, Fortinet, and NETGEAR — devices which often have limited monitoring and slow patch cycles.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-tag">C2 Infrastructure</div>
+            <div class="info-card-title">KV-Botnet Proxy Layer</div>
+            <div class="info-card-desc">A covert network of hundreds of compromised SOHO routers used to relay command-and-control traffic through residential U.S. IP addresses, frustrating geo-blocking and network-level detection.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-tag">Credential Access</div>
+            <div class="info-card-title">NTDS.dit Extraction</div>
+            <div class="info-card-desc">Use of ntdsutil to extract Active Directory database files, enabling offline password cracking and lateral movement with legitimate domain credentials.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-tag">Evasion</div>
+            <div class="info-card-title">Zero Malware Footprint</div>
+            <div class="info-card-desc">No custom tools deployed at any stage — defeats virtually all EDR platforms, antivirus, and SIEM rules dependent on malware signatures or behavioral anomalies tied to known malicious binaries.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">// Tool Inventory</div>
+        <ul class="bullet-list">
+          <li><strong>PowerShell</strong> — Script execution, remote management, data collection</li>
+          <li><strong>WMI / WMIC</strong> — System queries, process execution, lateral movement</li>
+          <li><strong>netsh</strong> — Network configuration, port forwarding, firewall manipulation</li>
+          <li><strong>ntdsutil</strong> — Active Directory database extraction</li>
+          <li><strong>certutil</strong> — File encoding/decoding, certificate operations</li>
+          <li><strong>net / net1</strong> — User and group enumeration</li>
+          <li><strong>ipconfig / route</strong> — Network reconnaissance</li>
+          <li><strong>nbtstat / netstat</strong> — Connection and session enumeration</li>
+        </ul>
+
+        <div class="callout" style="margin-top:32px;">
+          <strong>DETECTION CHALLENGE:</strong><br>
+          All of the above are standard Windows administrative tools present on every Windows machine. This makes behavioral detection extremely difficult — defenders must rely on contextual anomalies, command-line argument analysis, and network traffic patterns rather than binary signatures.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- WHY LOTL WORKS — full-width centered -->
+    <div class="section-label" style="justify-content:center;">// Why LOTL Works</div>
+    <div class="lotl-grid">
+      <div class="lotl-item">
+        <div class="lotl-icon">🚫</div>
+        <div class="lotl-title">No Signatures</div>
+        <div class="lotl-desc">No malware means no signatures to detect or block</div>
+      </div>
+      <div class="lotl-item">
+        <div class="lotl-icon">🎭</div>
+        <div class="lotl-title">Blends In</div>
+        <div class="lotl-desc">Commands are indistinguishable from legitimate admin activity</div>
+      </div>
+      <div class="lotl-item">
+        <div class="lotl-icon">🛡️</div>
+        <div class="lotl-title">Defeats AV & EDR</div>
+        <div class="lotl-desc">Antivirus and endpoint detection platforms are largely ineffective</div>
+      </div>
+      <div class="lotl-item">
+        <div class="lotl-icon">🌐</div>
+        <div class="lotl-title">Origin Hidden</div>
+        <div class="lotl-desc">KV-Botnet proxy routing conceals geographic source of traffic</div>
+      </div>
+      <div class="lotl-item">
+        <div class="lotl-icon">🔑</div>
+        <div class="lotl-title">Legit Credentials</div>
+        <div class="lotl-desc">Compromised valid credentials appear as authorized access</div>
+      </div>
+      <div class="lotl-item">
+        <div class="lotl-icon">⏳</div>
+        <div class="lotl-title">Long Dwell Time</div>
+        <div class="lotl-desc">Can remain dormant for years without triggering security alerts</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-l">Section 02 — Tactics, Techniques &amp; Procedures</div>
+    <div class="footer-r"><span>VOLT TYPHOON</span> · ISYS 40403</div>
+  </footer>
+</div>
+
+<!-- ===================== PAGE: SECTORS ===================== -->
+<div class="page" id="page-sectors">
+  <div class="page-header">
+    <div class="page-header-bg">SECTORS</div>
+    <div class="page-number">// 03 — Target Sectors &amp; Potential Impacts</div>
+    <div class="page-title decode-title" data-text="Target Sectors & Potential Impact">Target Sectors &amp; <em>Potential Impact</em></div>
+    <div class="page-subtitle">Critical infrastructure sectors infiltrated by Volt Typhoon and the real-world disruption scenarios that could result from activation of pre-positioned access.</div>
+  </div>
+
+  <div class="page-body">
+    <div class="prose" style="max-width:800px;">
+      <p>Volt Typhoon's targeting profile is not random. Each infiltrated sector represents a node whose disruption would generate <strong>maximum civilian and military impact</strong> during a geopolitical crisis — particularly a Taiwan conflict scenario. The breadth of penetration suggests a systematic mapping of every critical dependency in U.S. infrastructure.</p>
+    </div>
+
+    <div class="sector-grid">
+      <div class="sector-cell">
+        <div class="sector-icon">⚡</div>
+        <div class="sector-name">Energy Grid</div>
+        <div class="sector-desc">Electric utilities and grid operators. Pre-positioned access could enable targeted blackouts affecting millions of civilians and military bases simultaneously.</div>
+      </div>
+      <div class="sector-cell">
+        <div class="sector-icon">💧</div>
+        <div class="sector-name">Water Systems</div>
+        <div class="sector-desc">Water treatment and distribution SCADA systems. Manipulation of chemical dosing or supply routing could cause public health crises.</div>
+      </div>
+      <div class="sector-cell">
+        <div class="sector-icon">🚢</div>
+        <div class="sector-name">Transportation</div>
+        <div class="sector-desc">Port operations, rail networks, logistics systems. Disruption delays military materiel movement and civilian supply chains simultaneously.</div>
+      </div>
+      <div class="sector-cell">
+        <div class="sector-icon">📡</div>
+        <div class="sector-name">Telecommunications</div>
+        <div class="sector-desc">ISPs, backbone providers, undersea cable operators. Communication blackouts would hamper coordination of both civilian emergency response and military operations.</div>
+      </div>
+      <div class="sector-cell">
+        <div class="sector-icon">🏥</div>
+        <div class="sector-name">Healthcare</div>
+        <div class="sector-desc">Hospital networks and emergency services. System disruption during a crisis could directly cost lives and overwhelm casualty response capacity.</div>
+      </div>
+      <div class="sector-cell">
+        <div class="sector-icon">🛡️</div>
+        <div class="sector-name">Defense Industrial Base</div>
+        <div class="sector-desc">Defense contractors and military-adjacent facilities. Access degrades manufacturing capacity and logistics for military hardware during active conflict.</div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="two-col">
+      <div>
+        <div class="section-label">// The Guam Focus</div>
+        <div class="prose">
+          <p>Intelligence assessments have repeatedly highlighted <strong>Guam as a disproportionate focus</strong> of Volt Typhoon operations. Guam hosts Andersen Air Force Base and Naval Base Guam — the two most strategically critical U.S. military installations for any Pacific conflict response.</p>
+          <p>Disrupting Guam's communications, power, and transportation infrastructure at the outset of a conflict would severely degrade the speed and effectiveness of any U.S. military response to a Taiwan scenario — the primary strategic objective aligned with known PRC military planning.</p>
+        </div>
+        <div class="callout guam-egg-trigger" style="margin-top:24px;">
+          <strong>STRATEGIC LOGIC:</strong><br>
+          Disable Guam's infrastructure → Delay U.S. military response → Extend operational window for PRC military action in Taiwan Strait.
+        </div>
+      </div>
+      <div>
+        <div class="section-label">// Potential Disruption Scenarios</div>
+        <ul class="bullet-list">
+          <li>Coordinated <strong>power grid blackouts</strong> across multiple states during crisis period</li>
+          <li><strong>Communication network failures</strong> hampering emergency coordination and military C2</li>
+          <li><strong>Port and rail disruption</strong> delaying military logistics and resupply chains</li>
+          <li>Water system manipulation causing <strong>public health emergencies</strong> and civil unrest</li>
+          <li>Hospital network disruption <strong>overwhelming emergency response</strong> capacity</li>
+          <li>Simultaneous multi-sector activation to create <strong>cascading system failures</strong></li>
+          <li>Psychological impact generating civilian panic that further <strong>strains government response</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-l">Section 03 — Target Sectors &amp; Potential Impacts</div>
+    <div class="footer-r"><span>VOLT TYPHOON</span> · ISYS 40403</div>
+  </footer>
+</div>
+
+<!-- ===================== PAGE: LEGAL ===================== -->
+<div class="page" id="page-legal">
+  <div class="page-header">
+    <div class="page-header-bg">LEGAL</div>
+    <div class="page-number">// 04 — U.S. Legal Framework &amp; Response</div>
+    <div class="page-title decode-title" data-text="U.S. Legal Framework & Response">U.S. Legal Framework &amp; <em>Response</em></div>
+    <div class="page-subtitle">Relevant U.S. statutes and executive orders governing responses to foreign cyber threats, and proposed defensive countermeasures.</div>
+  </div>
+
+  <div class="page-body">
+    <div class="prose" style="max-width:800px;">
+      <p>The United States maintains a layered legal architecture for responding to state-sponsored cyber threats. While existing statutes provide tools for prosecution and surveillance, the Volt Typhoon campaign exposed <strong>significant gaps</strong> in both legal authority and operational response capacity — particularly around real-time disruption of embedded adversary access.</p>
+    </div>
+
+    <div class="section-label" style="margin-top:40px;">// Applicable Legal Frameworks</div>
+    <div class="law-grid">
+      <div class="law-card">
+        <div class="law-abbr">FISA</div>
+        <div class="law-name">Foreign Intelligence Surveillance Act</div>
+        <div class="law-desc">Authorizes electronic surveillance of foreign intelligence targets on U.S. soil. Provides legal basis for monitoring state-sponsored actors inside domestic networks, but requires court orders and can be slow to operationalize during active intrusions.</div>
+      </div>
+      <div class="law-card">
+        <div class="law-abbr">CFAA</div>
+        <div class="law-name">Computer Fraud &amp; Abuse Act</div>
+        <div class="law-desc">Primary federal statute for prosecuting unauthorized computer access. Useful for domestic actors but provides limited extraterritorial enforcement against foreign state actors who operate with impunity from Chinese jurisdiction.</div>
+      </div>
+      <div class="law-card">
+        <div class="law-abbr">EO 13873</div>
+        <div class="law-name">Executive Orders on Foreign Cyber Threats</div>
+        <div class="law-desc">Authorizes sanctions and supply chain restrictions against foreign cyber threats. Underpins restrictions on Huawei, ZTE, and other PRC technology entities deemed national security risks in U.S. infrastructure.</div>
+      </div>
+      <div class="law-card">
+        <div class="law-abbr">CIRCIA</div>
+        <div class="law-name">Cyber Incident Reporting for Critical Infrastructure Act (2022)</div>
+        <div class="law-desc">Mandates rapid incident reporting by critical infrastructure operators to CISA. A direct legislative response to detection gaps exposed by Volt Typhoon — requires reports within 72 hours of a significant cyber incident.</div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="two-col">
+      <div>
+        <div class="section-label">// Proposed Defensive Measures</div>
+        <ul class="defense-list">
+          <li>
+            <span class="defense-num">01</span>
+            <span><strong style="color:#ddd">Enhanced Vulnerability Disclosure Programs</strong> — Mandatory rapid patching timelines for internet-facing infrastructure devices, directly countering Volt Typhoon's primary edge device entry vectors.</span>
+          </li>
+          <li>
+            <span class="defense-num">02</span>
+            <span><strong style="color:#ddd">Public-Private Threat Intelligence Sharing</strong> — Expanded frameworks enabling real-time detection signatures to propagate from CISA to private sector operators without bureaucratic delay.</span>
+          </li>
+          <li>
+            <span class="defense-num">03</span>
+            <span><strong style="color:#ddd">Zero-Trust Architecture Mandates</strong> — Required multi-factor authentication and least-privilege access for all critical infrastructure operators, limiting lateral movement after initial compromise.</span>
+          </li>
+          <li>
+            <span class="defense-num">04</span>
+            <span><strong style="color:#ddd">International Deterrence Frameworks</strong> — Diplomatic pressure through Five Eyes and G7 to establish costs for state-sponsored pre-positioning operations against civilian infrastructure.</span>
+          </li>
+          <li>
+            <span class="defense-num">05</span>
+            <span><strong style="color:#ddd">CNMF Hunt Operations</strong> — Standing authority for Cyber National Mission Force to actively hunt and evict adversary presence from critical infrastructure networks on an ongoing basis.</span>
+          </li>
+          <li>
+            <span class="defense-num">06</span>
+            <span><strong style="color:#ddd">Network Segmentation Requirements</strong> — Mandatory OT/IT network separation for industrial control systems, reducing the ability of a perimeter breach to cascade into operational disruption.</span>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="section-label">// Key Legal Gaps Identified</div>
+        <div class="card-stack">
+          <div class="info-card">
+            <div class="info-card-tag">Enforcement Gap</div>
+            <div class="info-card-title">Extraterritorial Prosecution Limits</div>
+            <div class="info-card-desc">CFAA indictments against PRC nationals (e.g., APT41 indictments) carry no practical enforcement mechanism — China does not extradite nationals for cyber offenses.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-tag">Response Speed</div>
+            <div class="info-card-title">Interagency Coordination Delays</div>
+            <div class="info-card-desc">Disrupting an active embedded adversary requires FBI, CISA, NSA, and Cyber Command coordination — a process that can take weeks when actors are already inside critical systems.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-tag">Reporting Gap</div>
+            <div class="info-card-title">CIRCIA Implementation Lag</div>
+            <div class="info-card-desc">CIRCIA reporting rules are still being finalized. Many critical infrastructure operators operated for years without mandatory reporting requirements during Volt Typhoon's active campaign.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-tag">Private Sector</div>
+            <div class="info-card-title">Limited Private Active Defense Authority</div>
+            <div class="info-card-desc">Private companies lack legal authority to conduct active defense (hack-back) operations — leaving offensive response entirely dependent on government action.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-l">Section 04 — U.S. Legal Framework &amp; Response</div>
+    <div class="footer-r"><span>VOLT TYPHOON</span> · ISYS 40403</div>
+  </footer>
+</div>
+
+<!-- ===================== PAGE: REFERENCES ===================== -->
+<div class="page" id="page-references">
+  <div class="page-header">
+    <div class="page-header-bg">REFS</div>
+    <div class="page-number">// References — Sources Used in This Paper</div>
+    <div class="page-title decode-title" data-text="References">References</div>
+    <div class="page-subtitle">All sources cited directly in the research paper and portfolio analysis.</div>
+  </div>
+
+  <div class="page-body">
+    <div class="section-label">// Academic &amp; Research Sources</div>
+
+    <div class="ref-entry">
+      <div class="ref-num">[01]</div>
+      <div class="ref-content">
+        <strong>Braccia, C.</strong> — "From Vietnam to Volt Typhoon: How the PRC Refined Grey Zone Cyber Tactics before Targeting the West." <em>SSRN Electronic Journal</em>, 2024.
+      </div>
+    </div>
+
+    <div class="ref-entry">
+      <div class="ref-num">[02]</div>
+      <div class="ref-content">
+        "China's Strategic Competition in Cyberspace: Volt Typhoon and Salt Typhoon as a Projection of Power, a More Aggressive Posture and a Future Beyond Espionage." <em>Peer-reviewed journal article</em>, 2024.
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-label">// Government &amp; Intelligence Advisories</div>
+
+    <div class="ref-entry">
+      <div class="ref-num">[03]</div>
+      <div class="ref-content">
+        <strong>CISA / NSA / FBI Joint Cybersecurity Advisory</strong> — "Volt Typhoon: A Pre-positioned Threat to U.S. Critical Infrastructure." Cybersecurity and Infrastructure Security Agency, May 2023.
+        <a href="https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-144a" target="_blank">cisa.gov/news-events/cybersecurity-advisories/aa23-144a</a>
+      </div>
+    </div>
+
+    <div class="ref-entry">
+      <div class="ref-num">[04]</div>
+      <div class="ref-content">
+        <strong>Microsoft Threat Intelligence</strong> — "Volt Typhoon targets US critical infrastructure with living-off-the-land techniques." Microsoft Security Blog, May 24, 2023.
+        <a href="https://www.microsoft.com/en-us/security/blog/2023/05/24/volt-typhoon-targets-us-critical-infrastructure-with-living-off-the-land-techniques/" target="_blank">microsoft.com/security/blog/2023/05/24/volt-typhoon</a>
+      </div>
+    </div>
+
+    <div class="ref-entry">
+      <div class="ref-num">[05]</div>
+      <div class="ref-content">
+        <strong>FBI / CISA / NSA</strong> — "People's Republic of China State-Sponsored Cyber Actor Living off the Land to Evade Detection." Joint Advisory AA23-144A, 2023.
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:40px; max-width:700px;">
+      <strong>NOTE:</strong> Additional references will be added as research is finalized. All sources will be formatted in accordance with the citation style specified by the course instructor.
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-l">References — Sources Used in This Paper</div>
+    <div class="footer-r"><span>VOLT TYPHOON</span> · ISYS 40403</div>
+  </footer>
+</div>
+
+<!-- ===================== PAGE: RESOURCES ===================== -->
+<div class="page" id="page-resources">
+  <div class="page-header">
+    <div class="page-header-bg">RESOURCES</div>
+    <div class="page-number">// Additional Resources — Related but Not Cited</div>
+    <div class="page-title decode-title" data-text="Additional Resources">Additional <em>Resources</em></div>
+    <div class="page-subtitle">External resources related to Chinese cyber threats and critical infrastructure security — not directly cited in the paper but valuable for further exploration.</div>
+  </div>
+
+  <div class="page-body">
+    <div class="section-label">// Government &amp; Official Resources</div>
+
+    <div class="resource-entry">
+      <div>
+        <div class="resource-title">CISA Known Exploited Vulnerabilities Catalog</div>
+        <div class="resource-desc">Live catalog of CVEs actively exploited in the wild, including those used by Volt Typhoon against edge devices.</div>
+        <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" class="resource-link">cisa.gov/known-exploited-vulnerabilities-catalog</a>
+      </div>
+      <div class="resource-tag">CISA</div>
+    </div>
+
+    <div class="resource-entry">
+      <div>
+        <div class="resource-title">CISA Cross-Sector Cybersecurity Performance Goals</div>
+        <div class="resource-desc">Baseline cybersecurity practices for critical infrastructure operators — directly applicable to Volt Typhoon defensive recommendations.</div>
+        <a href="https://www.cisa.gov/cross-sector-cybersecurity-performance-goals" target="_blank" class="resource-link">cisa.gov/cross-sector-cybersecurity-performance-goals</a>
+      </div>
+      <div class="resource-tag">CISA</div>
+    </div>
+
+    <div class="resource-entry">
+      <div>
+        <div class="resource-title">MITRE ATT&CK — Volt Typhoon Group Profile</div>
+        <div class="resource-desc">Comprehensive, structured mapping of all known Volt Typhoon techniques to the MITRE ATT&CK framework — an essential technical reference.</div>
+        <a href="https://attack.mitre.org/groups/G1017/" target="_blank" class="resource-link">attack.mitre.org/groups/G1017</a>
+      </div>
+      <div class="resource-tag">MITRE</div>
+    </div>
+
+    <div class="resource-entry">
+      <div>
+        <div class="resource-title">NSA — Cybersecurity Advisories &amp; Technical Guidance</div>
+        <div class="resource-desc">NSA's public cybersecurity advisories including guidance on detecting living-off-the-land techniques and hardening network edge devices.</div>
+        <a href="https://www.nsa.gov/Press-Room/Cybersecurity-Advisories-Guidance/" target="_blank" class="resource-link">nsa.gov/Press-Room/Cybersecurity-Advisories-Guidance</a>
+      </div>
+      <div class="resource-tag">NSA</div>
+    </div>
+
+    <div class="section-divider"></div>
+    <div class="section-label">// Academic &amp; Research Resources</div>
+
+    <div class="resource-entry">
+      <div>
+        <div class="resource-title">Council on Foreign Relations — Cyber Operations Tracker</div>
+        <div class="resource-desc">Database of publicly known state-sponsored cyber operations — provides historical context for PRC cyber campaigns preceding Volt Typhoon.</div>
+        <a href="https://www.cfr.org/cyber-operations" target="_blank" class="resource-link">cfr.org/cyber-operations</a>
+      </div>
+      <div class="resource-tag">CFR</div>
+    </div>
+
+    <div class="resource-entry">
+      <div>
+        <div class="resource-title">Recorded Future — China Cyber Threat Intelligence</div>
+        <div class="resource-desc">Commercial threat intelligence reports on PRC state-sponsored activity with detailed technical analysis of Chinese APT groups.</div>
+        <a href="https://www.recordedfuture.com/research/china" target="_blank" class="resource-link">recordedfuture.com/research/china</a>
+      </div>
+      <div class="resource-tag">Industry</div>
+    </div>
+
+    <div class="resource-entry">
+      <div>
+        <div class="resource-title">Mandiant / Google — APT Groups &amp; Operations</div>
+        <div class="resource-desc">Mandiant's ongoing research on Chinese APT groups, including technical profiles of Volt Typhoon and related PRC threat actors.</div>
+        <a href="https://www.mandiant.com/resources/apt-groups" target="_blank" class="resource-link">mandiant.com/resources/apt-groups</a>
+      </div>
+      <div class="resource-tag">Industry</div>
+    </div>
+
+    <div class="resource-entry">
+      <div>
+        <div class="resource-title">Lawfare — Cybersecurity &amp; National Security Analysis</div>
+        <div class="resource-desc">Legal and policy analysis of cyber threats, including detailed coverage of FISA, CIRCIA, and executive authority for responding to state-sponsored cyber intrusions.</div>
+        <a href="https://www.lawfaremedia.org/topic/cybersecurity" target="_blank" class="resource-link">lawfaremedia.org/topic/cybersecurity</a>
+      </div>
+      <div class="resource-tag">Policy</div>
+    </div>
+
+    <div class="callout" style="margin-top:40px; max-width:700px;">
+      <strong>NOTE:</strong> Additional resources will be added as research progresses. All links verified as of project date — external links may change over time.
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-l">Additional Resources — Related but Not Cited</div>
+    <div class="footer-r"><span>VOLT TYPHOON</span> · ISYS 40403</div>
+  </footer>
+</div>
+
+<!-- ===================== PAGE: REPORT ===================== -->
+<div class="page" id="page-report">
+  <div class="page-header">
+    <div class="page-header-bg">REPORT</div>
+    <div class="page-number">// Written Report</div>
+    <div class="page-title decode-title" data-text="Written Report">Written <em>Report</em></div>
+    <div class="page-subtitle">The full written research paper will be linked or embedded here upon completion.</div>
+  </div>
+
+  <div class="page-body">
+    <div class="report-placeholder">
+      <div class="report-icon">📄</div>
+      <div class="report-title">RESEARCH PAPER</div>
+      <div class="report-desc">
+        The complete written report — "Chinese Cyber Threats to U.S. Critical Infrastructure: An Analysis of Volt Typhoon" — will be linked here upon finalization. A PDF embed or direct download link can be added below.
+      </div>
+      <button class="btn" onclick="alert('Report link will be added upon paper completion.')">
+        ↓ &nbsp; Download Report (PDF)
+      </button>
+    </div>
+
+    <div class="section-label" style="margin-top:48px;">// Paper Structure Preview</div>
+    <div class="card-stack">
+      <div class="info-card">
+        <div class="info-card-tag">Section 1</div>
+        <div class="info-card-title">Background and Attribution to China / Volt Typhoon</div>
+        <div class="info-card-desc">Discovery by Microsoft in 2023, subsequent U.S. agency attribution, and the strategic shift from espionage to pre-positioning.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Section 2</div>
+        <div class="info-card-title">Techniques, Tactics, and Procedures</div>
+        <div class="info-card-desc">Living-off-the-land techniques, KV-Botnet infrastructure, edge device exploitation, and evasion methodology.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Section 3</div>
+        <div class="info-card-title">Target Sectors and Potential Impacts</div>
+        <div class="info-card-desc">Critical infrastructure sectors targeted, real cases and examples, and disruption scenarios during geopolitical tensions.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Section 4</div>
+        <div class="info-card-title">U.S. Legal Framework and Response Strategies</div>
+        <div class="info-card-desc">Review of FISA and relevant executive orders, proposed defensive measures, and international diplomacy strategies.</div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:32px; max-width:700px;">
+      <strong>TO ADD YOUR REPORT:</strong><br>
+      Replace the placeholder button href with your PDF link, or embed the PDF directly using an &lt;iframe&gt; with <code>src="your-report.pdf"</code> and a set height (e.g., 800px). Google Drive PDF links also work with the embed approach.
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-l">Written Report — Chinese Cyber Threats to U.S. Critical Infrastructure</div>
+    <div class="footer-r"><span>VOLT TYPHOON</span> · ISYS 40403</div>
+  </footer>
+</div>
+
+<!-- ===================== EASTER EGG CSS ===================== -->
+<style>
+/* EGG 1 — Classified terminal popup (landing page threat bar) */
+#egg-classified {
+  display: none;
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  z-index: 9999;
+  background: #000;
+  border: 1px solid var(--red);
+  box-shadow: 0 0 60px rgba(255,45,59,0.4), inset 0 0 40px rgba(0,0,0,0.8);
+  padding: 40px 48px;
+  min-width: 460px;
+  font-family: var(--mono);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+
+#egg-classified.show {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: all;
+}
+
+#egg-classified .egg-header {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--red);
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--red-dim);
+  padding-bottom: 12px;
+}
+
+#egg-classified .egg-line {
+  font-size: 12px;
+  color: #00ff41;
+  letter-spacing: 0.08em;
+  line-height: 2;
+}
+
+#egg-classified .egg-line .blink {
+  animation: cursorBlink 0.8s step-end infinite;
+}
+
+#egg-classified .egg-close {
+  margin-top: 24px;
+  font-size: 10px;
+  color: var(--muted);
+  cursor: pointer;
+  letter-spacing: 0.2em;
+  transition: color 0.2s;
+}
+#egg-classified .egg-close:hover { color: var(--red); }
+
+@keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* EGG 2 — Binary LOTL watermark (TTPs page — hidden in page-header-bg) */
+.lotl-binary-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 64px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255,45,59,0.13);
+  user-select: none;
+  pointer-events: none;
+  line-height: 1.6;
+}
+
+/* EGG 3 — Targeting lock on Guam callout */
+#egg-target-flash {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 9998;
+  pointer-events: none;
+  border: 3px solid var(--red);
+  box-shadow: inset 0 0 80px rgba(255,45,59,0.15);
+  animation: targetFlash 1.8s ease forwards;
+}
+
+@keyframes targetFlash {
+  0%  { opacity: 0; }
+  10% { opacity: 1; }
+  80% { opacity: 1; }
+  100%{ opacity: 0; }
+}
+
+#egg-target-coords {
+  display: none;
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  font-family: var(--mono);
+  text-align: center;
+  pointer-events: none;
+  animation: targetFlash 1.8s ease forwards;
+}
+
+#egg-target-coords .coord-label {
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+
+#egg-target-coords .coord-value {
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 20px var(--red);
+}
+
+#egg-target-coords .coord-sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 8px;
+  letter-spacing: 0.2em;
+}
+
+/* Guam callout cursor hint */
+.guam-egg-trigger { cursor: crosshair !important; }
+
+/* EGG 4 — Konami hack takeover (Legal page) */
+#egg-hacked {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #000;
+  font-family: var(--mono);
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+#egg-hacked.show { display: flex; }
+
+#egg-hacked .hack-skull {
+  font-size: 72px;
+  margin-bottom: 24px;
+  animation: skullPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes skullPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+
+#egg-hacked .hack-title {
+  font-family: var(--display);
+  font-size: clamp(48px, 8vw, 96px);
+  color: var(--red);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 40px rgba(255,45,59,0.6);
+  animation: hackGlitch 0.15s infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes hackGlitch {
+  0%  { transform: none; }
+  25% { transform: translateX(-3px) skewX(-1deg); }
+  50% { transform: translateX(3px) skewX(1deg); }
+  75% { transform: translateX(-1px); }
+  100%{ transform: none; }
+}
+
+#egg-hacked .hack-stream {
+  font-size: 11px;
+  color: #00ff41;
+  letter-spacing: 0.12em;
+  line-height: 2.2;
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+#egg-hacked .hack-dismiss {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  animation: fadeInOut 2s ease infinite;
+}
+
+@keyframes fadeInOut { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+#egg-hacked .hack-bg-matrix {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: -1;
+  opacity: 0.07;
+}
+</style>
+
+<!-- EGG 3 overlay elements -->
+<div id="egg-target-flash"></div>
+<div id="egg-target-coords">
+  <div class="coord-label">// TARGET ACQUIRED</div>
+  <div class="coord-value">13.5831° N &nbsp; 144.9368° E</div>
+  <div class="coord-sub">ANDERSEN AIR FORCE BASE — GUAM</div>
+</div>
+
+<!-- EGG 1 popup -->
+<div id="egg-classified">
+  <div class="egg-header">// UNAUTHORIZED ACCESS DETECTED — CLASSIFICATION: TOP SECRET//SCI</div>
+  <div class="egg-line">&gt; Analyst: <span style="color:var(--gold)">VOLT_TYPHOON_TRACKER</span></div>
+  <div class="egg-line">&gt; Access node: <span style="color:var(--gold)">CISA-NET-07 [GUAM]</span></div>
+  <div class="egg-line">&gt; Threat status: <span style="color:var(--red)">CRITICAL — EMBEDDED</span></div>
+  <div class="egg-line">&gt; Dwell time: <span style="color:var(--gold)">~820 days undetected</span></div>
+  <div class="egg-line">&gt; Action: <span style="color:#00ff41">MONITORING... DO NOT DISRUPT</span><span class="blink">█</span></div>
+  <div class="egg-close" onclick="document.getElementById('egg-classified').classList.remove('show')">[ CLOSE TERMINAL — ESC ]</div>
+</div>
+
+<!-- EGG 4 hack takeover -->
+<div id="egg-hacked" onclick="closeHackEgg()">
+  <canvas id="hack-matrix-canvas" class="hack-bg-matrix" style="position:absolute;inset:0;width:100%;height:100%;z-index:-1;opacity:0.12;"></canvas>
+  <div class="hack-skull">☠</div>
+  <div class="hack-title">YOU HAVE BEEN<br>HACKED</div>
+  <div class="hack-stream" id="hackStream"></div>
+  <div class="hack-dismiss">[ CLICK ANYWHERE TO PATCH VULNERABILITY ]</div>
+</div>
+
+<!-- ===================== JS ===================== -->
+<script>
+// ===================== PAGE ORDER =====================
+const PAGE_ORDER = ['landing','background','ttp','sectors','legal','references','resources','report'];
+const PAGE_LABELS = ['Home','01 · Background','02 · TTPs','03 · Sectors','04 · Legal','References','Resources','Report'];
+let currentPageIndex = 0;
+
+// ===================== SIGNAL INTERFERENCE TRANSITION =====================
+const overlay    = document.getElementById('transitionOverlay');
+const tCanvas    = document.getElementById('transitionCanvas');
+const tScanlines = document.getElementById('transitionScanlines');
+const tChroma    = document.getElementById('transitionChroma');
+const tCtx       = tCanvas.getContext('2d');
+
+function resizeTransitionCanvas() {
+  tCanvas.width  = window.innerWidth;
+  tCanvas.height = window.innerHeight;
+}
+resizeTransitionCanvas();
+window.addEventListener('resize', resizeTransitionCanvas);
+
+function runTransition(callback) {
+  overlay.classList.add('active');
+  const w = tCanvas.width, h = tCanvas.height;
+  let frame = 0;
+  const totalFrames = 18; // ~300ms at 60fps
+
+  function drawInterference(intensity) {
+    tCtx.clearRect(0, 0, w, h);
+    // Horizontal glitch slices
+    const sliceCount = Math.floor(intensity * 22);
+    for (let i = 0; i < sliceCount; i++) {
+      const y      = Math.random() * h;
+      const sliceH = Math.random() * 12 + 2;
+      const shift  = (Math.random() - 0.5) * intensity * 80;
+      const alpha  = Math.random() * 0.6 + 0.1;
+      tCtx.fillStyle = `rgba(${Math.random() > 0.5 ? '255,45,59' : '0,229,255'},${alpha})`;
+      tCtx.fillRect(shift, y, w, sliceH);
+    }
+    // Random pixel noise blocks
+    const blockCount = Math.floor(intensity * 30);
+    for (let i = 0; i < blockCount; i++) {
+      const bx = Math.random() * w;
+      const by = Math.random() * h;
+      const bw = Math.random() * 120 + 10;
+      const bh = Math.random() * 6 + 2;
+      tCtx.fillStyle = `rgba(0,0,0,${Math.random() * 0.8 + 0.1})`;
+      tCtx.fillRect(bx, by, bw, bh);
+    }
+    // Binary stream overlay
+    tCtx.font = '10px "Share Tech Mono", monospace';
+    tCtx.fillStyle = `rgba(255,45,59,${intensity * 0.35})`;
+    for (let col = 0; col < w; col += 14) {
+      for (let row = 0; row < h; row += 14) {
+        if (Math.random() < intensity * 0.4) {
+          tCtx.fillText(Math.random() > 0.5 ? '1' : '0', col, row);
+        }
+      }
+    }
+  }
+
+  function tick() {
+    frame++;
+    const half = totalFrames / 2;
+    // 0→1 build up, then 1→0 resolve
+    const intensity = frame <= half
+      ? frame / half
+      : 1 - (frame - half) / half;
+
+    overlay.style.opacity     = intensity;
+    tScanlines.style.opacity  = intensity * 0.7;
+    tChroma.style.opacity     = intensity * 0.06;
+    drawInterference(intensity);
+
+    // At peak, swap the page
+    if (frame === Math.floor(half)) {
+      callback();
+    }
+
+    if (frame < totalFrames) {
+      requestAnimationFrame(tick);
+    } else {
+      overlay.style.opacity = 0;
+      tCtx.clearRect(0, 0, w, h);
+      overlay.classList.remove('active');
+    }
+  }
+
+  requestAnimationFrame(tick);
+}
+
+// ===================== PAGE NAVIGATION =====================
+function showPage(id, linkEl) {
+  const newIndex = PAGE_ORDER.indexOf(id);
+  if (newIndex !== -1) currentPageIndex = newIndex;
+
+  runTransition(() => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if (linkEl) {
+      linkEl.classList.add('active');
+    } else {
+      // Sync nav highlight when navigating via present arrows
+      const navLinks = document.querySelectorAll('.nav-links a');
+      if (navLinks[newIndex]) navLinks[newIndex].classList.add('active');
+    }
+    window.scrollTo({ top: 0 });
+    updatePresentCounter();
+    setTimeout(() => initDecodeObserver(), 80);
+  });
+  return false;
+}
+
+// ===================== PRESENTATION MODE =====================
+let presentMode = false;
+
+function togglePresentMode() {
+  presentMode = !presentMode;
+  document.body.classList.toggle('present-mode', presentMode);
+  document.getElementById('presentUI').classList.toggle('visible', presentMode);
+  document.getElementById('presentBtn').textContent = presentMode ? '✕ EXIT' : '⊞ PRESENT';
+  if (presentMode) updatePresentCounter();
+}
+
+function updatePresentCounter() {
+  const counter = document.getElementById('presentCounter');
+  const total   = PAGE_ORDER.length;
+  const curr    = String(currentPageIndex + 1).padStart(2, '0');
+  const tot     = String(total).padStart(2, '0');
+  counter.textContent = `${curr} / ${tot}`;
+}
+
+function presentNav(dir) {
+  const newIndex = Math.max(0, Math.min(PAGE_ORDER.length - 1, currentPageIndex + dir));
+  if (newIndex === currentPageIndex) return;
+  currentPageIndex = newIndex;
+  showPage(PAGE_ORDER[newIndex], null);
+}
+
+// Keyboard arrows in present mode + Escape to exit
+document.addEventListener('keydown', e => {
+  if (presentMode) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); presentNav(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); presentNav(-1); }
+    if (e.key === 'Escape') togglePresentMode();
+  }
+});
+
+// BINARY DECODE ANIMATION
+const DECODE_DURATION = 2400;
+const FRAME_RATE = 60;
+
+function decodeTitleEffect(el) {
+  if (el.dataset.decoded === 'true') return;
+  el.dataset.decoded = 'true';
+
+  const finalText = el.dataset.text;
+  const emWord = el.querySelector('em') ? el.querySelector('em').textContent : null;
+  const totalFrames = Math.round(DECODE_DURATION / FRAME_RATE);
+  let frame = 0;
+
+  el.textContent = Array.from({length: Math.floor(finalText.length * 1.4)}, () => Math.random() > 0.5 ? '1' : '0').join('');
+
+  const interval = setInterval(() => {
+    frame++;
+    const progress = frame / totalFrames;
+
+    if (progress >= 1) {
+      clearInterval(interval);
+      if (emWord) {
+        el.innerHTML = finalText.replace(emWord, `<em>${emWord}</em>`);
+      } else {
+        el.textContent = finalText;
+      }
+      return;
+    }
+
+    const revealCount = Math.floor(progress * finalText.length);
+    let displayed = '';
+
+    for (let i = 0; i < finalText.length; i++) {
+      displayed += i < revealCount ? finalText[i] : (Math.random() > 0.5 ? '1' : '0');
+    }
+
+    const noise = Array.from({length: Math.floor((1 - progress) * 6)}, () => Math.random() > 0.5 ? '1' : '0').join('');
+    el.textContent = displayed + (noise ? ' ' + noise : '');
+  }, FRAME_RATE);
+}
+
+function initDecodeObserver() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        decodeTitleEffect(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.decode-title:not([data-decoded="true"])').forEach(el => {
+    observer.observe(el);
+  });
+}
+
+// Init on load
+initDecodeObserver();
+
+// ============================================================
+// EASTER EGG 1 — Landing page: click all 8 lit threat blocks
+// ============================================================
+(function() {
+  let clickCount = 0;
+  let resetTimer;
+  const blocks = document.querySelectorAll('.t-block.on');
+  blocks.forEach(b => {
+    b.style.cursor = 'pointer';
+    b.addEventListener('click', () => {
+      clickCount++;
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(() => { clickCount = 0; }, 3000);
+      if (clickCount >= 8) {
+        clickCount = 0;
+        const el = document.getElementById('egg-classified');
+        el.style.display = 'block';
+        requestAnimationFrame(() => el.classList.add('show'));
+      }
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.getElementById('egg-classified').classList.remove('show');
+    }
+  });
+})();
+
+// ============================================================
+// EASTER EGG 3 — Sectors page: triple-click the Guam callout
+// ============================================================
+(function() {
+  let clicks = 0, timer;
+  const guamCallout = document.querySelector('.guam-egg-trigger');
+  if (!guamCallout) return;
+  guamCallout.addEventListener('click', () => {
+    clicks++;
+    clearTimeout(timer);
+    timer = setTimeout(() => { clicks = 0; }, 600);
+    if (clicks >= 3) {
+      clicks = 0;
+      const flash = document.getElementById('egg-target-flash');
+      const coords = document.getElementById('egg-target-coords');
+      flash.style.display = 'block';
+      coords.style.display = 'block';
+      // Reset animation
+      flash.style.animation = 'none';
+      coords.style.animation = 'none';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          flash.style.animation = 'targetFlash 1.8s ease forwards';
+          coords.style.animation = 'targetFlash 1.8s ease forwards';
+        });
+      });
+      setTimeout(() => {
+        flash.style.display = 'none';
+        coords.style.display = 'none';
+      }, 1900);
+    }
+  });
+})();
+
+// ============================================================
+// EASTER EGG 4 — Legal page: Konami code triggers hack screen
+// ============================================================
+(function() {
+  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let pos = 0;
+
+  document.addEventListener('keydown', e => {
+    if (e.key === KONAMI[pos]) {
+      pos++;
+      if (pos === KONAMI.length) {
+        pos = 0;
+        triggerHackEgg();
+      }
+    } else {
+      pos = 0;
+    }
+  });
+
+  const hackLines = [
+    '> Scanning network topology...',
+    '> CVE-2022-20821 — EXPLOITED [Cisco IOS]',
+    '> Firewall bypassed via VPN misconfiguration',
+    '> Lateral movement via WMI: SUCCESS',
+    '> ntdsutil.exe — extracting NTDS.dit...',
+    '> 847 credential hashes dumped',
+    '> C2 routing via KV-Botnet proxy: ACTIVE',
+    '> Access established. Dwell mode: ENABLED',
+    '> Detection probability: 0.003%',
+    '> Waiting for activation signal...'
+  ];
+
+  window.triggerHackEgg = function() {
+    const screen = document.getElementById('egg-hacked');
+    const streamEl = document.getElementById('hackStream');
+    screen.classList.add('show');
+    streamEl.innerHTML = '';
+    startMatrix();
+    let i = 0;
+    const lineInterval = setInterval(() => {
+      if (i >= hackLines.length) { clearInterval(lineInterval); return; }
+      const line = document.createElement('div');
+      line.textContent = hackLines[i];
+      line.style.opacity = '0';
+      line.style.transition = 'opacity 0.3s';
+      streamEl.appendChild(line);
+      requestAnimationFrame(() => { requestAnimationFrame(() => { line.style.opacity = '1'; }); });
+      i++;
+    }, 300);
+  };
+
+  window.closeHackEgg = function() {
+    document.getElementById('egg-hacked').classList.remove('show');
+    stopMatrix();
+  };
+
+  // Matrix rain for hack background
+  let matrixInterval;
+  function startMatrix() {
+    const canvas = document.getElementById('hack-matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const cols = Math.floor(canvas.width / 14);
+    const drops = Array(cols).fill(1);
+    matrixInterval = setInterval(() => {
+      ctx.fillStyle = 'rgba(0,0,0,0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ff2d3b';
+      ctx.font = '12px monospace';
+      drops.forEach((y, i) => {
+        const char = Math.random() > 0.5 ? '1' : '0';
+        ctx.fillText(char, i * 14, y * 14);
+        if (y * 14 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      });
+    }, 50);
+  }
+
+  function stopMatrix() {
+    clearInterval(matrixInterval);
+    const canvas = document.getElementById('hack-matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+})();
+</script>
+</body>
+</html>
