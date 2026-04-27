@@ -324,7 +324,8 @@ body::before{
 
 /* ─── FOOTER ──────────────────────────────────────── */
 .site-footer{
-  position:relative;z-index:1;padding:22px 60px;
+  position:sticky;bottom:0;z-index:10;padding:22px 60px;
+  background:rgba(0,0,0,0.97);backdrop-filter:blur(8px);
   border-top:1px solid rgba(232,0,29,.15);
   display:flex;justify-content:space-between;align-items:center
 }
@@ -1109,14 +1110,14 @@ body::before{
     <div class="page-header-ghost">REPORT</div>
     <div class="eyebrow">// Written Report</div>
     <div class="page-title">Written <em>Report</em></div>
-    <p class="page-sub">The complete research paper. Link or embed the final PDF once submitted.</p>
+    <p class="page-sub">Download the complete research paper as a PDF.</p>
   </div>
 
   <div class="wrap">
     <div class="report-box">
       <div class="report-icon">📄</div>
       <div class="report-title">Research Paper — PDF</div>
-      <a href="https://raw.githubusercontent.com/walkernm2-stack/volt-typhoon-portfolio/main/Cybersecurity%20Final%20Paper.pdf" target="_blank" class="btn">&#x2193; &nbsp; Download Full Report (PDF)</a>
+      <a href="https://raw.githubusercontent.com/walkernm2-stack/volt-typhoon-portfolio/main/Cybersecurity%20Final%20Paper.pdf" download="Cybersecurity_Final_Paper.pdf" target="_blank" class="btn">&#x2193; &nbsp; Download Full Report (PDF)</a>
     </div>
   </div>
 
